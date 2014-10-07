@@ -1,0 +1,699 @@
+?sownload
+?file
+url(a)
+download.file
+download.file(a)
+download.file(a, 1123071.kml)
+download.file(a, "1123071.kml")
+sheader <- paste('http://sgis.kostat.go.kr/sgisopenapi/SGISService/ResultSave',#
+                    "-H 'Host: sgis.kostat.go.kr'",#
+                    "-H 'User-Agent: Mozilla/5.0 (X11; Ubuntu; Linux x86_64; rv:31.0) Gecko/20100101 Firefox/31.0'",#
+                    "-H 'Accept: text/html,application/xhtml+xml,application/xml;q=0.9,*/*;q=0.8'",#
+                    "-H 'Accept-Language: en-us,en;q=0.7,ko;q=0.3'",#
+                    "-H 'Accept-Encoding: gzip, deflate'",#
+                    "-H 'Content-Type: application/x-www-form-urlencoded; charset=UTF-8'",#
+                    "-H 'X-Requested-With: XMLHttpRequest'",#
+                    "-H 'Referer: http://sgis.kostat.go.kr/sgisnavigator/index.jsp?initialMode=login'",#
+                    "-H 'Cookie: JSESSIONID=GsMyAqn5QPkr7E1ahB4vWa6tua4uf7P0eBnAgL981koaJ8k8SatZ74OiBx8mYM1J.GSKSWAS2_servlet_engine1'",#
+                    "-H 'Connection: keep-alive'",#
+                    "-H 'Pragma: no-cache'",#
+                    "-H 'Cache-Control: no-cache'")#
+sdata <- paste("--data ",#
+              "'SGISOAKey=SA2O2013031884635830",#
+              "&itemName=", URLencode(itemName),#
+              "&category=datamartQuery",#
+              "&itemId=in_to_001",#
+              "&fullName=", URLencode(fullName),#
+              "&fillOpacity=1",#
+              "&transparencyCount=0.85",#
+              "&rendererClassify=10",#
+              "&rendererColorTop=%23FE291A",#
+              "&districtCode=", 11250,#
+              "&baseYear=2010",#
+              "&label=itemValue'", sep="")#
+suppressWarnings(aa <- system(paste("curl", sheader, sdata), intern=TRUE, ignore.stderr = TRUE))#
+ab <- paste(aa, collapse="")#
+ac <- fromJSON(ab)
+fontFamily <- "굴림"#
+itemName <- "인구 > 인구총괄 > 총인구(명)"#
+fullName <- "인구 > 인구총괄 > 총인구(명)"
+sheader <- paste('http://sgis.kostat.go.kr/sgisopenapi/SGISService/ResultSave',#
+                    "-H 'Host: sgis.kostat.go.kr'",#
+                    "-H 'User-Agent: Mozilla/5.0 (X11; Ubuntu; Linux x86_64; rv:31.0) Gecko/20100101 Firefox/31.0'",#
+                    "-H 'Accept: text/html,application/xhtml+xml,application/xml;q=0.9,*/*;q=0.8'",#
+                    "-H 'Accept-Language: en-us,en;q=0.7,ko;q=0.3'",#
+                    "-H 'Accept-Encoding: gzip, deflate'",#
+                    "-H 'Content-Type: application/x-www-form-urlencoded; charset=UTF-8'",#
+                    "-H 'X-Requested-With: XMLHttpRequest'",#
+                    "-H 'Referer: http://sgis.kostat.go.kr/sgisnavigator/index.jsp?initialMode=login'",#
+                    "-H 'Cookie: JSESSIONID=GsMyAqn5QPkr7E1ahB4vWa6tua4uf7P0eBnAgL981koaJ8k8SatZ74OiBx8mYM1J.GSKSWAS2_servlet_engine1'",#
+                    "-H 'Connection: keep-alive'",#
+                    "-H 'Pragma: no-cache'",#
+                    "-H 'Cache-Control: no-cache'")#
+sdata <- paste("--data ",#
+              "'SGISOAKey=SA2O2013031884635830",#
+              "&itemName=", URLencode(itemName),#
+              "&category=datamartQuery",#
+              "&itemId=in_to_001",#
+              "&fullName=", URLencode(fullName),#
+              "&fillOpacity=1",#
+              "&transparencyCount=0.85",#
+              "&rendererClassify=10",#
+              "&rendererColorTop=%23FE291A",#
+              "&districtCode=", 11250,#
+              "&baseYear=2010",#
+              "&label=itemValue'", sep="")#
+suppressWarnings(aa <- system(paste("curl", sheader, sdata), intern=TRUE, ignore.stderr = TRUE))#
+ab <- paste(aa, collapse="")#
+ac <- fromJSON(ab)
+library(httr)#
+require(RJSONIO)#
+library(XML)#
+library(data.table)#
+library(fields)#
+library(scales)#
+library(plyr)#
+library(sp)#
+library(rgdal)
+sheader <- paste('http://sgis.kostat.go.kr/sgisopenapi/SGISService/ResultSave',#
+                    "-H 'Host: sgis.kostat.go.kr'",#
+                    "-H 'User-Agent: Mozilla/5.0 (X11; Ubuntu; Linux x86_64; rv:31.0) Gecko/20100101 Firefox/31.0'",#
+                    "-H 'Accept: text/html,application/xhtml+xml,application/xml;q=0.9,*/*;q=0.8'",#
+                    "-H 'Accept-Language: en-us,en;q=0.7,ko;q=0.3'",#
+                    "-H 'Accept-Encoding: gzip, deflate'",#
+                    "-H 'Content-Type: application/x-www-form-urlencoded; charset=UTF-8'",#
+                    "-H 'X-Requested-With: XMLHttpRequest'",#
+                    "-H 'Referer: http://sgis.kostat.go.kr/sgisnavigator/index.jsp?initialMode=login'",#
+                    "-H 'Cookie: JSESSIONID=GsMyAqn5QPkr7E1ahB4vWa6tua4uf7P0eBnAgL981koaJ8k8SatZ74OiBx8mYM1J.GSKSWAS2_servlet_engine1'",#
+                    "-H 'Connection: keep-alive'",#
+                    "-H 'Pragma: no-cache'",#
+                    "-H 'Cache-Control: no-cache'")#
+sdata <- paste("--data ",#
+              "'SGISOAKey=SA2O2013031884635830",#
+              "&itemName=", URLencode(itemName),#
+              "&category=datamartQuery",#
+              "&itemId=in_to_001",#
+              "&fullName=", URLencode(fullName),#
+              "&fillOpacity=1",#
+              "&transparencyCount=0.85",#
+              "&rendererClassify=10",#
+              "&rendererColorTop=%23FE291A",#
+              "&districtCode=", 11250,#
+              "&baseYear=2010",#
+              "&label=itemValue'", sep="")#
+suppressWarnings(aa <- system(paste("curl", sheader, sdata), intern=TRUE, ignore.stderr = TRUE))#
+ab <- paste(aa, collapse="")#
+ac <- fromJSON(ab)
+ac
+bb <- POST("http://sgis.kostat.go.kr/sgisopenapi/SGISService/TotalByGeometry", config=handler, body=body)#
+cc <- content(bb, "text") #
+ac <- fromJSON(cc)#
+dd <- lapply(ac$result, function(x) unlist(x))#
+ddl <- unlist(lapply(dd, length))#
+ind <- which(ddl != 6)#
+if(length(ind) > 0){#
+    nvalo <- c("address", "dongCode", "summary.총가구(가구)", "summary.총인구(명)", "summary.총주택(호)", "summary.총괄사업체수(개)")#
+    for(i in 1:length(ind)){#
+        nval <- names(dd[[ind[i]]])#
+        tmp <- rep(NA, 6)#
+        tmp[match(nval, nvalo)] <- dd[[ind[i]]]#
+        names(tmp) <- nvalo#
+        dd[[ind[i]]] <- tmp   #
+    }#
+}#
+#
+ee <- matrix(unlist(dd), byrow=T, ncol=6)#
+ee <- ee[order(ee[,2]),]#
+colnames(ee) <- nvalo <- c("address", "dongCode", "총가구(가구)", "총인구(명)", "총주택(호)", "총괄사업체수(개)")#
+head(ee)
+검증#
+library(httr)#
+handler <- add_headers( "Host" = "sgis.kostat.go.kr",#
+                        "User-Agent" = "Mozilla/5.0 (X11; Ubuntu; Linux x86_64; rv:31.0) Gecko/20100101 Firefox/31.0",#
+                        "Accept" = "text/html,application/xhtml+xml,application/xml;q=0.9,*/*;q=0.8",#
+                        "Accept-Language" = "en-us,en;q=0.7,ko;q=0.3",#
+                        "Accept-Encoding" = "gzip, deflate",#
+                        "Content-Type" = "application/x-www-form-urlencoded; charset=UTF-8",#
+                        "X-Requested-With" = "XMLHttpRequest",#
+                        "Referer" = "http://sgis.kostat.go.kr/sgisnavigator/index.jsp?initialMode=login",#
+                        "Content-Length" = "612",#
+                        "Cookie" = "JSESSIONID=GsMyAqn5QPkr7E1ahB4vWa6tua4uf7P0eBnAgL981koaJ8k8SatZ74OiBx8mYM1J.GSKSWAS2_servlet_engine1",#
+                        "Connection" = "keep-alive",#
+                        "Pragma" = "no-cache",#
+                        "Cache-Control" = "no-cache")#
+#
+fontFamily <- "굴림"#
+itemName <- "인구 > 인구총괄 > 총인구(명)"#
+fullName <- "인구 > 인구총괄 > 총인구(명)"#
+#
+#SGISOAKey=SA2O2013031884635830&key=201407231634290035&fontFamily=#
+body <- paste("SGISOAKey=SA2O2013031884635830&key=201407231856480055&fontFamily=", URLencode(fontFamily),#
+              "&fontColor=", URLencode("#ffaa02"),#
+              "&fontSize=13&labelOutlineWidth=3&labelOutlineColor=", URLencode("#111111"),#
+              "&strokeColor=%23000000&strokeWidth=1&itemName=", URLencode(itemName),#
+              "&category=datamartQuery&itemId=in_to_001",#
+              "&fullName=", URLencode(fullName),#
+              "&fillOpacity=1&transparencyCount=0.85",#
+              "&rendererClassify=10&rendererColorTop=", URLencode("#FE291A"),#
+              "&districtCode=",#
+              11250,#
+              "&baseYear=2010&label=itemValue", sep="")
+bb <- POST("http://sgis.kostat.go.kr/sgisopenapi/SGISService/TotalByGeometry", config=handler, body=body)#
+cc <- content(bb, "text") #
+ac <- fromJSON(cc)
+ac
+bb <- POST("http://sgis.kostat.go.kr/sgisopenapi/SGISService/ResultSave", config=handler, body=body)#
+cc <- content(bb, "text") #
+ac <- fromJSON(cc)
+ac
+bb <- POST("http://sgis.kostat.go.kr/sgisopenapi/SGISService/ResultCount", config=handler, body=body)#
+cc <- content(bb, "text") #
+ac <- fromJSON(cc)
+ac
+load("/Users/jang/Dropbox/censuscode.RData")
+ls()
+head(censuscode)
+load("~/Dropbox/censuscode.RData")#
+uid <- unique(substring(censuscode[,5], 1, 7))
+uid
+# mobile versionv#
+load("~/Dropbox/censuscode.RData")#
+uids <- unique(substring(censuscode[,5], 1, 7))
+uid <- uids[1]
+val <- paste("curl 'http://sgis.kostat.go.kr/SGisService/getstaticsxml' -H 'Cookie: JSESSIONID=CvpnLVhjdI9Y8dS4ZqIexy2wuCvZTxvwXRu6NZKaGI7GFFTdSaGuNMUOWbwjTtfw.e1; statRegionOption=2; ",#
+    #              "statRegionEmdSidoCode=", 11, "; ",#
+    #              "statRegionEmdSigunguCode=", 11230, "; ",#
+                  "statRegionEmdCode=", uid, "; ",#
+                  "maxSearchRange=1000; legendColorScheme=0; opacity=70' -H 'Origin: http://sgis.kostat.go.kr' -H 'Accept-Encoding: gzip,deflate,sdch' -H 'Accept-Language: en-US,en;q=0.8' -H 'User-Agent: Mozilla/5.0 (Macintosh; Intel Mac OS X 10_9_4) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/36.0.1985.125 Safari/537.36' -H 'Content-Type: text/xml' -H 'Accept: application/xml, text/xml, */*; q=0.01' -H 'Referer: http://sgis.kostat.go.kr/sgisapp/mainsearch.htm' -H 'X-Requested-With: XMLHttpRequest' -H 'Connection: keep-alive' --data-binary ",#
+                  "$'",#
+                  gsub("'", "\"", "<?xml version='1.0' encoding='euc-kr'?> <SgisStaticsRequest  xmlns='http://service.gis.knso.org/sgistype' xmlns:xls='http://www.opengis.net/xls' xmlns:gml='http://www.opengis.net/gml'> <svcKey>SGIS2011101952956623</svcKey> <StaticsRequest> <ReqRegionInfo> <Region regionid='region_1'> <AdminRegion><AdminCode>1123071</AdminCode></AdminRegion></Region> </ReqRegionInfo> <ReqStatItemInfo> <MartStatItem itemId='item_1' itemName='\ucd1d\uc778\uad6c(\uba85)'> <baseYear>2010</baseYear> <itemFieldName>to_in_001</itemFieldName> </MartStatItem> </ReqStatItemInfo> <StaticsOutput targetSrs='LL_W' outputFormat='KML' outputUnit='OA'/> </StaticsRequest> </SgisStaticsRequest>"), "' --compressed", sep="")#
+    a <- system(val, intern=TRUE, ignore.stderr = TRUE)[4]#
+    a <- gsub("<URL>", "", a)#
+    a <- gsub("</URL>", "", a)#
+    a <- sub("^\\s+", "", a)#
+    download.file(a, paste(uid, ".kml", sep=""))
+?download.file
+download.file(a, paste(uid, ".kml", sep=""), quiet = TRUE)
+paste("/Dropbox/CensusSHP/", uid, ".kml", sep="")
+length(uids)
+# mobile versionv#
+load("~/Dropbox/censuscode.RData")#
+uids <- unique(substring(censuscode[,5], 1, 7))#
+pb <- txtProgressBar(min = 0, max = length(uids), style = 3)#
+for(i in 1:length(uids)){#
+#
+    val <- paste("curl 'http://sgis.kostat.go.kr/SGisService/getstaticsxml' -H 'Cookie: JSESSIONID=CvpnLVhjdI9Y8dS4ZqIexy2wuCvZTxvwXRu6NZKaGI7GFFTdSaGuNMUOWbwjTtfw.e1; statRegionOption=2; ",#
+    #              "statRegionEmdSidoCode=", 11, "; ",#
+    #              "statRegionEmdSigunguCode=", 11230, "; ",#
+                  "statRegionEmdCode=", uids[i], "; ",#
+                  "maxSearchRange=1000; legendColorScheme=0; opacity=70' -H 'Origin: http://sgis.kostat.go.kr' -H 'Accept-Encoding: gzip,deflate,sdch' -H 'Accept-Language: en-US,en;q=0.8' -H 'User-Agent: Mozilla/5.0 (Macintosh; Intel Mac OS X 10_9_4) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/36.0.1985.125 Safari/537.36' -H 'Content-Type: text/xml' -H 'Accept: application/xml, text/xml, */*; q=0.01' -H 'Referer: http://sgis.kostat.go.kr/sgisapp/mainsearch.htm' -H 'X-Requested-With: XMLHttpRequest' -H 'Connection: keep-alive' --data-binary ",#
+                  "$'",#
+                  gsub("'", "\"", "<?xml version='1.0' encoding='euc-kr'?> <SgisStaticsRequest  xmlns='http://service.gis.knso.org/sgistype' xmlns:xls='http://www.opengis.net/xls' xmlns:gml='http://www.opengis.net/gml'> <svcKey>SGIS2011101952956623</svcKey> <StaticsRequest> <ReqRegionInfo> <Region regionid='region_1'> <AdminRegion><AdminCode>1123071</AdminCode></AdminRegion></Region> </ReqRegionInfo> <ReqStatItemInfo> <MartStatItem itemId='item_1' itemName='\ucd1d\uc778\uad6c(\uba85)'> <baseYear>2010</baseYear> <itemFieldName>to_in_001</itemFieldName> </MartStatItem> </ReqStatItemInfo> <StaticsOutput targetSrs='LL_W' outputFormat='KML' outputUnit='OA'/> </StaticsRequest> </SgisStaticsRequest>"), "' --compressed", sep="")#
+    a <- system(val, intern=TRUE, ignore.stderr = TRUE)[4]#
+    a <- gsub("<URL>", "", a)#
+    a <- gsub("</URL>", "", a)#
+    a <- sub("^\\s+", "", a)#
+    download.file(a, paste("/Dropbox/CensusSHP/", uids[i], ".kml", sep=""), quiet = TRUE)#
+    setTxtProgressBar(pb, i)#
+}
+# mobile versionv#
+load("~/Dropbox/censuscode.RData")#
+uids <- unique(substring(censuscode[,5], 1, 7))#
+pb <- txtProgressBar(min = 0, max = length(uids), style = 3)#
+for(i in 1:length(uids)){#
+#
+    val <- paste("curl 'http://sgis.kostat.go.kr/SGisService/getstaticsxml' -H 'Cookie: JSESSIONID=CvpnLVhjdI9Y8dS4ZqIexy2wuCvZTxvwXRu6NZKaGI7GFFTdSaGuNMUOWbwjTtfw.e1; statRegionOption=2; ",#
+    #              "statRegionEmdSidoCode=", 11, "; ",#
+    #              "statRegionEmdSigunguCode=", 11230, "; ",#
+                  "statRegionEmdCode=", uids[i], "; ",#
+                  "maxSearchRange=1000; legendColorScheme=0; opacity=70' -H 'Origin: http://sgis.kostat.go.kr' -H 'Accept-Encoding: gzip,deflate,sdch' -H 'Accept-Language: en-US,en;q=0.8' -H 'User-Agent: Mozilla/5.0 (Macintosh; Intel Mac OS X 10_9_4) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/36.0.1985.125 Safari/537.36' -H 'Content-Type: text/xml' -H 'Accept: application/xml, text/xml, */*; q=0.01' -H 'Referer: http://sgis.kostat.go.kr/sgisapp/mainsearch.htm' -H 'X-Requested-With: XMLHttpRequest' -H 'Connection: keep-alive' --data-binary ",#
+                  "$'",#
+                  gsub("'", "\"", "<?xml version='1.0' encoding='euc-kr'?> <SgisStaticsRequest  xmlns='http://service.gis.knso.org/sgistype' xmlns:xls='http://www.opengis.net/xls' xmlns:gml='http://www.opengis.net/gml'> <svcKey>SGIS2011101952956623</svcKey> <StaticsRequest> <ReqRegionInfo> <Region regionid='region_1'> <AdminRegion><AdminCode>1123071</AdminCode></AdminRegion></Region> </ReqRegionInfo> <ReqStatItemInfo> <MartStatItem itemId='item_1' itemName='\ucd1d\uc778\uad6c(\uba85)'> <baseYear>2010</baseYear> <itemFieldName>to_in_001</itemFieldName> </MartStatItem> </ReqStatItemInfo> <StaticsOutput targetSrs='LL_W' outputFormat='KML' outputUnit='OA'/> </StaticsRequest> </SgisStaticsRequest>"), "' --compressed", sep="")#
+    a <- system(val, intern=TRUE, ignore.stderr = TRUE)[4]#
+    a <- gsub("<URL>", "", a)#
+    a <- gsub("</URL>", "", a)#
+    a <- sub("^\\s+", "", a)#
+    download.file(a, paste("~/Dropbox/CensusSHP/", uids[i], ".kml", sep=""), quiet = TRUE)#
+    setTxtProgressBar(pb, i)#
+}
+# mobile versionv#
+load("~/Dropbox/censuscode.RData")#
+uids <- unique(substring(censuscode[,5], 1, 7))#
+#pb <- txtProgressBar(min = 0, max = length(uids), style = 3)#
+for(i in 1:length(uids)){#
+#
+    val <- paste("curl 'http://sgis.kostat.go.kr/SGisService/getstaticsxml' -H 'Cookie: JSESSIONID=CvpnLVhjdI9Y8dS4ZqIexy2wuCvZTxvwXRu6NZKaGI7GFFTdSaGuNMUOWbwjTtfw.e1; statRegionOption=2; ",#
+    #              "statRegionEmdSidoCode=", 11, "; ",#
+    #              "statRegionEmdSigunguCode=", 11230, "; ",#
+                  "statRegionEmdCode=", uids[i], "; ",#
+                  "maxSearchRange=1000; legendColorScheme=0; opacity=70' -H 'Origin: http://sgis.kostat.go.kr' -H 'Accept-Encoding: gzip,deflate,sdch' -H 'Accept-Language: en-US,en;q=0.8' -H 'User-Agent: Mozilla/5.0 (Macintosh; Intel Mac OS X 10_9_4) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/36.0.1985.125 Safari/537.36' -H 'Content-Type: text/xml' -H 'Accept: application/xml, text/xml, */*; q=0.01' -H 'Referer: http://sgis.kostat.go.kr/sgisapp/mainsearch.htm' -H 'X-Requested-With: XMLHttpRequest' -H 'Connection: keep-alive' --data-binary ",#
+                  "$'",#
+                  gsub("'", "\"", "<?xml version='1.0' encoding='euc-kr'?> <SgisStaticsRequest  xmlns='http://service.gis.knso.org/sgistype' xmlns:xls='http://www.opengis.net/xls' xmlns:gml='http://www.opengis.net/gml'> <svcKey>SGIS2011101952956623</svcKey> <StaticsRequest> <ReqRegionInfo> <Region regionid='region_1'> <AdminRegion><AdminCode>1123071</AdminCode></AdminRegion></Region> </ReqRegionInfo> <ReqStatItemInfo> <MartStatItem itemId='item_1' itemName='\ucd1d\uc778\uad6c(\uba85)'> <baseYear>2010</baseYear> <itemFieldName>to_in_001</itemFieldName> </MartStatItem> </ReqStatItemInfo> <StaticsOutput targetSrs='LL_W' outputFormat='KML' outputUnit='OA'/> </StaticsRequest> </SgisStaticsRequest>"), "' --compressed", sep="")#
+    a <- system(val, intern=TRUE, ignore.stderr = TRUE)[4]#
+    a <- gsub("<URL>", "", a)#
+    a <- gsub("</URL>", "", a)#
+    a <- sub("^\\s+", "", a)#
+    cat(a, "\n")#
+    download.file(a, paste("~/Dropbox/CensusSHP/", uids[i], ".kml", sep=""), quiet = TRUE)#
+    #setTxtProgressBar(pb, i)#
+}
+uids
+i<-1
+val <- paste("curl 'http://sgis.kostat.go.kr/SGisService/getstaticsxml' -H 'Cookie: JSESSIONID=CvpnLVhjdI9Y8dS4ZqIexy2wuCvZTxvwXRu6NZKaGI7GFFTdSaGuNMUOWbwjTtfw.e1; statRegionOption=2; ",#
+                  "statRegionEmdSidoCode=", substring(uids[i], 1, 2), "; ",#
+                  "statRegionEmdSigunguCode=", substring(uids[i], 1, 5), "; ",#
+                  "statRegionEmdCode=", uids[i], "; ",#
+                  "maxSearchRange=1000; legendColorScheme=0; opacity=70' -H 'Origin: http://sgis.kostat.go.kr' -H 'Accept-Encoding: gzip,deflate,sdch' -H 'Accept-Language: en-US,en;q=0.8' -H 'User-Agent: Mozilla/5.0 (Macintosh; Intel Mac OS X 10_9_4) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/36.0.1985.125 Safari/537.36' -H 'Content-Type: text/xml' -H 'Accept: application/xml, text/xml, */*; q=0.01' -H 'Referer: http://sgis.kostat.go.kr/sgisapp/mainsearch.htm' -H 'X-Requested-With: XMLHttpRequest' -H 'Connection: keep-alive' --data-binary ",#
+                  "$'",#
+                  gsub("'", "\"", "<?xml version='1.0' encoding='euc-kr'?> <SgisStaticsRequest  xmlns='http://service.gis.knso.org/sgistype' xmlns:xls='http://www.opengis.net/xls' xmlns:gml='http://www.opengis.net/gml'> <svcKey>SGIS2011101952956623</svcKey> <StaticsRequest> <ReqRegionInfo> <Region regionid='region_1'> <AdminRegion><AdminCode>1123071</AdminCode></AdminRegion></Region> </ReqRegionInfo> <ReqStatItemInfo> <MartStatItem itemId='item_1' itemName='\ucd1d\uc778\uad6c(\uba85)'> <baseYear>2010</baseYear> <itemFieldName>to_in_001</itemFieldName> </MartStatItem> </ReqStatItemInfo> <StaticsOutput targetSrs='LL_W' outputFormat='KML' outputUnit='OA'/> </StaticsRequest> </SgisStaticsRequest>"), "' --compressed", sep="")#
+    a <- system(val, intern=TRUE, ignore.stderr = TRUE)[4]#
+    a <- gsub("<URL>", "", a)#
+    a <- gsub("</URL>", "", a)#
+    a <- sub("^\\s+", "", a)#
+    cat(a, "\n")#
+    download.file(a, paste("~/Dropbox/CensusSHP/", uids[i], ".kml", sep=""), quiet = TRUE)
+i<-
+2
+val <- paste("curl 'http://sgis.kostat.go.kr/SGisService/getstaticsxml' -H 'Cookie: JSESSIONID=CvpnLVhjdI9Y8dS4ZqIexy2wuCvZTxvwXRu6NZKaGI7GFFTdSaGuNMUOWbwjTtfw.e1; statRegionOption=2; ",#
+                  "statRegionEmdSidoCode=", substring(uids[i], 1, 2), "; ",#
+                  "statRegionEmdSigunguCode=", substring(uids[i], 1, 5), "; ",#
+                  "statRegionEmdCode=", uids[i], "; ",#
+                  "maxSearchRange=1000; legendColorScheme=0; opacity=70' -H 'Origin: http://sgis.kostat.go.kr' -H 'Accept-Encoding: gzip,deflate,sdch' -H 'Accept-Language: en-US,en;q=0.8' -H 'User-Agent: Mozilla/5.0 (Macintosh; Intel Mac OS X 10_9_4) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/36.0.1985.125 Safari/537.36' -H 'Content-Type: text/xml' -H 'Accept: application/xml, text/xml, */*; q=0.01' -H 'Referer: http://sgis.kostat.go.kr/sgisapp/mainsearch.htm' -H 'X-Requested-With: XMLHttpRequest' -H 'Connection: keep-alive' --data-binary ",#
+                  "$'",#
+                  gsub("'", "\"", "<?xml version='1.0' encoding='euc-kr'?> <SgisStaticsRequest  xmlns='http://service.gis.knso.org/sgistype' xmlns:xls='http://www.opengis.net/xls' xmlns:gml='http://www.opengis.net/gml'> <svcKey>SGIS2011101952956623</svcKey> <StaticsRequest> <ReqRegionInfo> <Region regionid='region_1'> <AdminRegion><AdminCode>1123071</AdminCode></AdminRegion></Region> </ReqRegionInfo> <ReqStatItemInfo> <MartStatItem itemId='item_1' itemName='\ucd1d\uc778\uad6c(\uba85)'> <baseYear>2010</baseYear> <itemFieldName>to_in_001</itemFieldName> </MartStatItem> </ReqStatItemInfo> <StaticsOutput targetSrs='LL_W' outputFormat='KML' outputUnit='OA'/> </StaticsRequest> </SgisStaticsRequest>"), "' --compressed", sep="")#
+    a <- system(val, intern=TRUE, ignore.stderr = TRUE)[4]#
+    a <- gsub("<URL>", "", a)#
+    a <- gsub("</URL>", "", a)#
+    a <- sub("^\\s+", "", a)#
+    cat(a, "\n")#
+    download.file(a, paste("~/Dropbox/CensusSHP/", uids[i], ".kml", sep=""), quiet = TRUE)
+uids[i]
+uids[1]
+val <- paste("curl 'http://sgis.kostat.go.kr/SGisService/getstaticsxml' -H 'Cookie: JSESSIONID=CvpnLVhjdI9Y8dS4ZqIexy2wuCvZTxvwXRu6NZKaGI7GFFTdSaGuNMUOWbwjTtfw.e1; statRegionOption=2; ",#
+#                  "statRegionEmdSidoCode=", substring(uids[i], 1, 2), "; ",#
+#                  "statRegionEmdSigunguCode=", substring(uids[i], 1, 5), "; ",#
+#                  "statRegionEmdCode=", uids[i], "; ",#
+                  "maxSearchRange=1000; legendColorScheme=0; opacity=70' -H 'Origin: http://sgis.kostat.go.kr' -H 'Accept-Encoding: gzip,deflate,sdch' -H 'Accept-Language: en-US,en;q=0.8' -H 'User-Agent: Mozilla/5.0 (Macintosh; Intel Mac OS X 10_9_4) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/36.0.1985.125 Safari/537.36' -H 'Content-Type: text/xml' -H 'Accept: application/xml, text/xml, */*; q=0.01' -H 'Referer: http://sgis.kostat.go.kr/sgisapp/mainsearch.htm' -H 'X-Requested-With: XMLHttpRequest' -H 'Connection: keep-alive' --data-binary ",#
+                  "$'",#
+                  gsub("'", "\"", "<?xml version='1.0' encoding='euc-kr'?> <SgisStaticsRequest  xmlns='http://service.gis.knso.org/sgistype' xmlns:xls='http://www.opengis.net/xls' xmlns:gml='http://www.opengis.net/gml'> <svcKey>SGIS2011101952956623</svcKey> <StaticsRequest> <ReqRegionInfo> <Region regionid='region_1'> <AdminRegion><AdminCode>"),#
+                  1123071,#
+                  gsub("'", "\"", "</AdminCode></AdminRegion></Region> </ReqRegionInfo> <ReqStatItemInfo> <MartStatItem itemId='item_1' itemName='\ucd1d\uc778\uad6c(\uba85)'> <baseYear>2010</baseYear> <itemFieldName>to_in_001</itemFieldName> </MartStatItem> </ReqStatItemInfo> <StaticsOutput targetSrs='LL_W' outputFormat='KML' outputUnit='OA'/> </StaticsRequest> </SgisStaticsRequest>"), "' --compressed", sep="")#
+    a <- system(val, intern=TRUE, ignore.stderr = TRUE)[4]#
+    a <- gsub("<URL>", "", a)#
+    a <- gsub("</URL>", "", a)#
+    a <- sub("^\\s+", "", a)#
+    cat(a, "\n")#
+    download.file(a, paste("~/Dropbox/CensusSHP/", uids[i], ".kml", sep=""), quiet = TRUE)#
+    #setTxtProgressBar(pb, i)
+uids[i]
+# mobile versionv#
+load("~/Dropbox/censuscode.RData")#
+uids <- unique(substring(censuscode[,5], 1, 7))#
+#pb <- txtProgressBar(min = 0, max = length(uids), style = 3)#
+for(i in 1:length(uids)){#
+#
+    val <- paste("curl 'http://sgis.kostat.go.kr/SGisService/getstaticsxml' -H 'Cookie: JSESSIONID=CvpnLVhjdI9Y8dS4ZqIexy2wuCvZTxvwXRu6NZKaGI7GFFTdSaGuNMUOWbwjTtfw.e1; statRegionOption=2; ",#
+#                  "statRegionEmdSidoCode=", substring(uids[i], 1, 2), "; ",#
+#                  "statRegionEmdSigunguCode=", substring(uids[i], 1, 5), "; ",#
+#                  "statRegionEmdCode=", uids[i], "; ",#
+                  "maxSearchRange=1000; legendColorScheme=0; opacity=70' -H 'Origin: http://sgis.kostat.go.kr' -H 'Accept-Encoding: gzip,deflate,sdch' -H 'Accept-Language: en-US,en;q=0.8' -H 'User-Agent: Mozilla/5.0 (Macintosh; Intel Mac OS X 10_9_4) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/36.0.1985.125 Safari/537.36' -H 'Content-Type: text/xml' -H 'Accept: application/xml, text/xml, */*; q=0.01' -H 'Referer: http://sgis.kostat.go.kr/sgisapp/mainsearch.htm' -H 'X-Requested-With: XMLHttpRequest' -H 'Connection: keep-alive' --data-binary ",#
+                  "$'",#
+                  gsub("'", "\"", "<?xml version='1.0' encoding='euc-kr'?> <SgisStaticsRequest  xmlns='http://service.gis.knso.org/sgistype' xmlns:xls='http://www.opengis.net/xls' xmlns:gml='http://www.opengis.net/gml'> <svcKey>SGIS2011101952956623</svcKey> <StaticsRequest> <ReqRegionInfo> <Region regionid='region_1'> <AdminRegion><AdminCode>"),#
+                  uids[i],#
+                  gsub("'", "\"", "</AdminCode></AdminRegion></Region> </ReqRegionInfo> <ReqStatItemInfo> <MartStatItem itemId='item_1' itemName='\ucd1d\uc778\uad6c(\uba85)'> <baseYear>2010</baseYear> <itemFieldName>to_in_001</itemFieldName> </MartStatItem> </ReqStatItemInfo> <StaticsOutput targetSrs='LL_W' outputFormat='KML' outputUnit='OA'/> </StaticsRequest> </SgisStaticsRequest>"), "' --compressed", sep="")#
+    a <- system(val, intern=TRUE, ignore.stderr = TRUE)[4]#
+    a <- gsub("<URL>", "", a)#
+    a <- gsub("</URL>", "", a)#
+    a <- sub("^\\s+", "", a)#
+    cat(a, "\n")#
+    download.file(a, paste("~/Dropbox/CensusSHP/", uids[i], ".kml", sep=""), quiet = TRUE)#
+    #setTxtProgressBar(pb, i)#
+}
+# mobile versionv#
+load("~/Dropbox/censuscode.RData")#
+uids <- unique(substring(censuscode[,5], 1, 7))#
+pb <- txtProgressBar(min = 0, max = length(uids), style = 3)#
+for(i in 1:length(uids)){#
+#
+    val <- paste("curl 'http://sgis.kostat.go.kr/SGisService/getstaticsxml' -H 'Cookie: JSESSIONID=CvpnLVhjdI9Y8dS4ZqIexy2wuCvZTxvwXRu6NZKaGI7GFFTdSaGuNMUOWbwjTtfw.e1; statRegionOption=2; ",#
+#                  "statRegionEmdSidoCode=", substring(uids[i], 1, 2), "; ",#
+#                  "statRegionEmdSigunguCode=", substring(uids[i], 1, 5), "; ",#
+#                  "statRegionEmdCode=", uids[i], "; ",#
+                  "maxSearchRange=1000; legendColorScheme=0; opacity=70' -H 'Origin: http://sgis.kostat.go.kr' -H 'Accept-Encoding: gzip,deflate,sdch' -H 'Accept-Language: en-US,en;q=0.8' -H 'User-Agent: Mozilla/5.0 (Macintosh; Intel Mac OS X 10_9_4) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/36.0.1985.125 Safari/537.36' -H 'Content-Type: text/xml' -H 'Accept: application/xml, text/xml, */*; q=0.01' -H 'Referer: http://sgis.kostat.go.kr/sgisapp/mainsearch.htm' -H 'X-Requested-With: XMLHttpRequest' -H 'Connection: keep-alive' --data-binary ",#
+                  "$'",#
+                  gsub("'", "\"", "<?xml version='1.0' encoding='euc-kr'?> <SgisStaticsRequest  xmlns='http://service.gis.knso.org/sgistype' xmlns:xls='http://www.opengis.net/xls' xmlns:gml='http://www.opengis.net/gml'> <svcKey>SGIS2011101952956623</svcKey> <StaticsRequest> <ReqRegionInfo> <Region regionid='region_1'> <AdminRegion><AdminCode>"),#
+                  uids[i],#
+                  gsub("'", "\"", "</AdminCode></AdminRegion></Region> </ReqRegionInfo> <ReqStatItemInfo> <MartStatItem itemId='item_1' itemName='\ucd1d\uc778\uad6c(\uba85)'> <baseYear>2010</baseYear> <itemFieldName>to_in_001</itemFieldName> </MartStatItem> </ReqStatItemInfo> <StaticsOutput targetSrs='LL_W' outputFormat='KML' outputUnit='OA'/> </StaticsRequest> </SgisStaticsRequest>"), "' --compressed", sep="")#
+    a <- system(val, intern=TRUE, ignore.stderr = TRUE)[4]#
+    a <- gsub("<URL>", "", a)#
+    a <- gsub("</URL>", "", a)#
+    a <- sub("^\\s+", "", a)#
+    #cat(a, "\n")#
+    download.file(a, paste("~/Dropbox/CensusSHP/", uids[i], ".kml", sep=""), quiet = TRUE)#
+    setTxtProgressBar(pb, i)#
+}
+lapply(spa, function(x) polygon(x[,1], x[,2], col=2))
+bus_info <- NULL#
+bus_info_n <- rep(0, 10000)
+ㅑㅅㄷㄱ <- -0
+iter <- 0
+b <- tryCatch(system(paste("python '~Dropbox/search_bus.daum.py'",  iter, 1),  intern=TRUE))
+cat(iter, "\n")#
+  b <- tryCatch(system(paste("python '~/Dropbox/search_bus.daum.py'",  iter, 1),  intern=TRUE))#
+  aa <- paste(gsub(" ","", gsub("\"","", gsub("\r","", b))), collapse = "")
+b <- tryCatch(system(paste("python '/Users/jang/Dropbox/search_bus.daum.py'",  iter, 1),  intern=TRUE))
+b <- tryCatch(system(paste("python '~/Dropbox/search_bus.daum.py'",  iter, 1),  intern=TRUE))
+aa <- paste(gsub(" ","", gsub("\"","", gsub("\r","", b))), collapse = "")#
+  n1 <- regexpr(",GroupList:", aa, fixed = TRUE)#
+  n2 <- regexpr(",GroupListBusType:", aa, fixed = TRUE)#
+  n3 <- regexpr(",List:", aa, fixed = TRUE)#
+  info <- substring(aa, 2, n1-1)#
+  GroupList <- substring(aa, n1+1, n2-1)#
+  GroupListBusType <- substring(aa, n2+1, n3-1)#
+  info <- strsplit(strsplit(info, ",")[[1]], ":")#
+  names(info) <- unlist(lapply(info, function(x) x[1]))#
+  info <- lapply(info,  function(x) x[-1])#
+  nbus <- as.numeric(info$total_count)
+nbux
+nbus
+aa
+b
+paste("python '/Users/jang/Dropbox/search_bus.daum.py'",  iter, 1)
+system(paste("python '/Users/jang/Dropbox/search_bus.daum.py'",  iter, 1),  intern=TRUE)
+#b <- tryCatch(system(paste("python '/home/jang/Downloads/MailDownloads/search_bus.daum.py'",  iter, 1),  intern=TRUE))#
+  tryCatch(b <- system(paste("python '/Users/jang/Dropbox/search_bus.daum.py'",  iter, 1),  intern=TRUE))
+b
+aa <- paste(gsub(" ","", gsub("\"","", gsub("\r","", b))), collapse = "")
+aa
+n1 <- regexpr(",GroupList:", aa, fixed = TRUE)#
+  n2 <- regexpr(",GroupListBusType:", aa, fixed = TRUE)#
+  n3 <- regexpr(",List:", aa, fixed = TRUE)#
+  info <- substring(aa, 2, n1-1)#
+  GroupList <- substring(aa, n1+1, n2-1)#
+  GroupListBusType <- substring(aa, n2+1, n3-1)#
+  info <- strsplit(strsplit(info, ",")[[1]], ":")#
+  names(info) <- unlist(lapply(info, function(x) x[1]))#
+  info <- lapply(info,  function(x) x[-1])#
+  nbus <- as.numeric(info$total_count)
+n1
+nbus
+n1 <- regexpr(",GroupList:", aa, fixed = TRUE)#
+  n2 <- regexpr(",GroupListBusType:", aa, fixed = TRUE)#
+  n3 <- regexpr(",List:", aa, fixed = TRUE)#
+  info <- substring(aa, 2, n1-1)#
+  GroupList <- substring(aa, n1+1, n2-1)#
+  GroupListBusType <- substring(aa, n2+1, n3-1)#
+  info <- strsplit(strsplit(info, ",")[[1]], ":")#
+  names(info) <- unlist(lapply(info, function(x) x[1]))#
+  info <- lapply(info,  function(x) x[-1])#
+  nbus <- as.numeric(info$total_count)
+npage <- 0#
+    tmp <- NULL#
+    nn <- 0
+if(nbus > 0){#
+    npage <- 0#
+    tmp <- NULL#
+    nn <- 0#
+    while(nn < nbus){#
+      npage <- npage +1#
+      #cat(npage, "\t")#
+      tryCatch(b <- system(paste("python '/home/jang/Downloads/MailDownloads/search_bus.daum.py'",  iter, npage),  intern=TRUE))#
+      aa <- paste(gsub(" ","", gsub("\"","", gsub("\r","", b))), collapse = "")#
+      n3 <- regexpr(",List:", aa, fixed = TRUE)#
+      tmp0 <- extractBus(aa, n3)#
+      tmp <- rbind(tmp, tmp0)#
+      nn <- nrow(tmp)#
+      #cat(nn, "\n")#
+    }#
+    bus_info <- rbind(bus_info, tmp)#
+  }
+if(nbus > 0){#
+    npage <- 0#
+    tmp <- NULL#
+    nn <- 0#
+    while(nn < nbus){#
+      npage <- npage +1#
+      #cat(npage, "\t")#
+      #tryCatch(b <- system(paste("python '/home/jang/Downloads/MailDownloads/search_bus.daum.py'",  iter, npage),  intern=TRUE))#
+      tryCatch(b <- system(paste("python '/Users/jang/Dropbox/search_bus.daum.py'",  iter, npage),  intern=TRUE))#
+      aa <- paste(gsub(" ","", gsub("\"","", gsub("\r","", b))), collapse = "")#
+      n3 <- regexpr(",List:", aa, fixed = TRUE)#
+      tmp0 <- extractBus(aa, n3)#
+      tmp <- rbind(tmp, tmp0)#
+      nn <- nrow(tmp)#
+      #cat(nn, "\n")#
+    }#
+    bus_info <- rbind(bus_info, tmp)#
+  }
+extractBus <- function(aa, n3){#
+  List <- substring(aa, n3+6, nchar(aa)-1)#
+  List <- strsplit(substring(List, 2, nchar(List)-2), "},")[[1]]#
+  List <- substring(List, 2, nchar(List))#
+  val <- c("DOCID", "BUS_NAME", "BUS_TYPE_ID", "START_POINT", "END_POINT", "wx", "wy", "BUS_INTERVAL_TIME", "BUS_FIRST_TIME", "BUS_LAST_TIME", "RGN_D1_NAME", "RGN_D2_NAME", "BUS_HCODE", "v_landmark")#
+  ind1 <- as.vector(sapply(val, function(x) gregexpr(x, List[8])[[1]]))#
+  gg <- sapply(List, function(y) as.vector(sapply(val, function(x) gregexpr(x, y)[[1]])))#
+  colnames(gg) <- NULL              #
+  List_mat <- matrix(NA, length(List), length(val))#
+  colnames(List_mat) <- val#
+  for(i in 1:length(List)){#
+    #ind1 <- rep(NA, length(val))#
+    #for(i in 1:length(val)){#
+    #  ind1[i] <- gregexpr(val[i], List[8])[[1]]#
+    #}#
+    #ind1 <- sort(ind1)#
+    ind1 <- as.vector(sapply(val, function(x) gregexpr(x, List[i])[[1]]))#
+    ind2 <- ind1#
+    ind2[1:(length(ind1)-1)] <- ind2[2:length(ind1)]-1#
+    ind2[length(ind1)] <- nchar(List[i])+1#
+    tmp <- strsplit(substring(List[i], ind1, ind2-1), ":")#
+    names(tmp) <- unlist(lapply(tmp, function(x) x[1]))#
+    tmp <- lapply(tmp, function(x) x[-1])#
+    if(length(tmp$BUS_FIRST_TIME) > 1){#
+      tmp$BUS_FIRST_TIME <- paste(tmp$BUS_FIRST_TIME, collapse=":")#
+    }#
+    if(length(tmp$BUS_LAST_TIME) > 1){#
+      tmp$BUS_LAST_TIME <- paste(tmp$BUS_LAST_TIME, collapse=":")#
+    }#
+    ind3 <- which(lapply(tmp, length) == 0)#
+    if(length(ind3) > 0){#
+      for(j in ind3){#
+        tmp[[j]] <- NA#
+      }#
+    }#
+    tmp <- unlist(tmp)#
+    ind <- match(colnames(List_mat), names(tmp))#
+    List_mat[i, ind] <- tmp#
+  }#
+  return(List_mat)#
+}
+if(nbus > 0){#
+    npage <- 0#
+    tmp <- NULL#
+    nn <- 0#
+    while(nn < nbus){#
+      npage <- npage +1#
+      #cat(npage, "\t")#
+      #tryCatch(b <- system(paste("python '/home/jang/Downloads/MailDownloads/search_bus.daum.py'",  iter, npage),  intern=TRUE))#
+      tryCatch(b <- system(paste("python '/Users/jang/Dropbox/search_bus.daum.py'",  iter, npage),  intern=TRUE))#
+      aa <- paste(gsub(" ","", gsub("\"","", gsub("\r","", b))), collapse = "")#
+      n3 <- regexpr(",List:", aa, fixed = TRUE)#
+      tmp0 <- extractBus(aa, n3)#
+      tmp <- rbind(tmp, tmp0)#
+      nn <- nrow(tmp)#
+      #cat(nn, "\n")#
+    }#
+    bus_info <- rbind(bus_info, tmp)#
+  }
+bus_info
+View(bus_info)
+tryCatch(b <- system(paste("python '/Users/jang/Dropbox/search_bus.daum.py'",  iter, 1),  intern=TRUE))
+b
+tryCatch(b <- system(paste("python '/Users/jang/Dropbox/search_bus.daum.py'",  1000, 0),  intern=TRUE))
+b
+tryCatch(b <- system(paste("python '/Users/jang/Dropbox/search_bus.daum.py'",  1000, 1),  intern=TRUE))
+b
+aa <- paste(gsub(" ","", gsub("\"","", gsub("\r","", b))), collapse = "")
+aa
+readLines(paste("http://map.daum.net/bus/info.json?output=json&callback=jQuery181043452701544684613_1396256828708&busline=", ㅠ1022, sep=""))
+readLines(paste("http://map.daum.net/bus/info.json?output=json&callback=jQuery181043452701544684613_1396256828708&busline=", "B1022", sep=""))
+a <- readLines(paste("http://map.daum.net/bus/info.json?output=json&callback=jQuery181043452701544684613_1396256828708&busline=", "B1022", sep=""))
+a <- paste(a, collapse="")#
+library(RJSONIO)#
+res <- fromJSON(a)
+a
+nchar("jQuery181043452701544684613_1396256828708")
+nchar(a)
+a<- substring(42, nchar(a))
+res <- fromJSON(a)
+a <- readLines("http://map.naver.com/search2/local.nhn?type=BUS_ROUTE&query=버스&menu=bus")#
+a <- paste(a, collapse="")#
+library(RJSONIO)#
+res <- fromJSON(a)
+res
+a <- readLines(paste("http://map.daum.net/bus/info.json?output=json&callback=jQuery181043452701544684613_1396256828708&busline=", "B1022", sep=""))
+a <- paste(a, collapse="")#
+library(RJSONIO)#
+res <- fromJSON(a)
+res
+a<- substring(42, nchar(a))
+a
+a <- readLines(paste("http://map.daum.net/bus/info.json?output=json&callback=jQuery181043452701544684613_1396256828708&busline=", "B1022", sep=""))
+a <- paste(a, collapse="")
+nhcar(a)
+nchar(a)
+substring(a,1 ,100)
+nchar("jQuery181043452701544684613_1396256828708")
+substring(a, 41, nchar(a))
+a <- substring(a, 41, nchar(a))
+res <- fromJSON(a)
+a
+a <- readLines(paste("http://map.daum.net/bus/info.json?output=json&callback=jQuery181043452701544684613_1396256828708&busline=", "B1022", sep=""))
+a <- paste(a, collapse="")
+a
+nchar("jQuery181043452701544684613_1396256828708")
+nchar(a)
+length(a)
+b <- substring(a, 42, 68643)
+b
+a
+b <- substring(a, 1, 41)
+b
+b <- substring(a, 1, 50)
+b
+b <- substring(a, 42, 50)
+b
+b <- substring(a, 42, 100000000)
+b
+nchar(a)
+substring
+b <- substring(a, 42)
+b
+substring(b, 1,2)
+substring(b, 1, 10)
+substring(b, 1)
+print(b)
+res <- fromJSON(a)
+res <- fromJSON(b)
+res <- fromJSON(a)
+library(XML)
+xmlToList(xmlTreeParse(a))
+xmlToList(xmlTreeParse(b))
+xmlTreeParse(a)
+a <- readLines("http://map.naver.com/search2/local.nhn?type=BUS_ROUTE&query=버스&menu=bus")#
+a <- paste(a, collapse="")#
+library(RJSONIO)#
+res <- fromJSON(a)
+a
+a <- readLines(paste("http://map.daum.net/bus/info.json?output=json&callback=jQuery181043452701544684613_1396256828708&busline=", "B1022", sep=""))
+a <- paste(a, collapse="")
+a
+nchar("jQuery181043452701544684613_1396256828708(")
+nchar(a)
+b <- substring(a, 43, nchar(a)-1)
+a
+b
+res <- fromJSON(b)
+res
+grepexp
+?gsub
+gregexpr("(", a)
+gregexpr("[(]", a)
+gregexpr("[(]", a)[[1]]
+gregexpr("[(]", a)[[1]][1]
+b <- substring(a, gregexpr("[(]", a)[[1]][1] + 1, nchar(a)-1)
+names(b)
+nams(res)
+names(res)
+res$path
+strsplt(res$path, " ")
+strsplit(res$path, " ")
+strsplit(res$path, ",")
+strsplit(strsplit(res$path, ",")[[1]], " ")
+as.numeric(strsplit(strsplit(res$path, ",")[[1]], " "))
+lapply(strsplit(strsplit(res$path, ",")[[1]], " "), as.numeric)
+unlist(lapply(strsplit(strsplit(res$path, ",")[[1]], " "), as.numeric))
+matrix(unlist(lapply(strsplit(strsplit(res$path, ",")[[1]], " "), as.numeric)), ncol=2, byrow=TRUE)
+rpath <- matrix(unlist(lapply(strsplit(strsplit(res$path, ",")[[1]], " "), as.numeric)), ncol=2, byrow=TRUE)
+plot(rpath, type="l")
+a <- readLines("http://map.daum.net/bus/search/busregion.json?callback=jQuery18106722856718930038_1406550713963&hcode=11&page=1")
+a
+a <- paste(a, collapse="")
+b <- substring(a, gregexpr("[(]", a)[[1]][1] + 1, nchar(a)-1)
+res <- fromJSON(b)
+res
+res$buses
+library(data.table)
+rbindlist
+rbindlist(res$buses)
+res$buses <- lapply(res$buses, data.frame)
+rbindlist(res$buses)
+res <- fromJSON(b)
+res$buses <- lapply(res$buses, function(x) data.frame(matrix(x, nrow=1)))
+res$buses
+?matrix
+res <- fromJSON(b)
+res$buses <- lapply(res$buses, function(x) data.frame(as.matrix(x, nrow=1)))
+res$buses
+res$buses[[1]]
+dim(res$buses[[1]])
+?as.matrix
+res <- fromJSON(b)
+res$buses <- lapply(res$buses, function(x) data.frame(as.matrix(x, nrow=1, byrow=T)))
+res$buses
+res <- fromJSON(b)
+res$buses
+names(res$buses[[1]])
+res$buses <- lapply(res$buses, function(x) data.frame(matrix(x, nrow=1, dimnames=list(NA, names(x)))))
+res$buses <- lapply(res$buses, function(x) data.frame(matrix(x, nrow=1, dimnames=list(NULL, names(x)))))
+res$buses
+rbindlist(res$buses)
+res$buses <- lapply(res$buses, function(x) data.frame(matrix(x, nrow=1, dimnames=list(NULL, names(x)))))
+res
+rbindlist(res$buses)
+a <- readLines(paste("http://map.daum.net/bus/info.json?output=json&callback=jQuery181043452701544684613_1396256828708&busline=", "B1022", sep=""))#
+a <- paste(a, collapse="")#
+b <- substring(a, gregexpr("[(]", a)[[1]][1] + 1, nchar(a)-1)#
+res <- fromJSON(b) rpath <- matrix(unlist(lapply(strsplit(strsplit(res$path, ",")[[1]], " "), as.numeric)), ncol=2, byrow=TRUE)
+a <- readLines(paste("http://map.daum.net/bus/info.json?output=json&callback=jQuery181043452701544684613_1396256828708&busline=", "B1022", sep=""))#
+a <- paste(a, collapse="")#
+b <- substring(a, gregexpr("[(]", a)[[1]][1] + 1, nchar(a)-1)#
+res <- fromJSON(b); rpath <- matrix(unlist(lapply(strsplit(strsplit(res$path, ",")[[1]], " "), as.numeric)), ncol=2, byrow=TRUE)
+res
+names(res)
+res$realTime
+res$busStops
+res$busLocations
+readLines("https://www.google.com/maps/dir/37.5527821,126.9444216/34.806762,127.24804/@36.1550302,126.0425606,8z/data=!3m1!4b1!4m3!4m2!1m0!1m0")
+readLines("google.com/maps/dir/37.5527821,126.9444216/34.806762,127.24804/@36.1550302,126.0425606,8z/data=!3m1!4b1!4m3!4m2!1m0!1m0")
+library(RCurl)#
+    eval( expr = #
+        parse( text = getURL("http://www.mayin.org/ajayshah/KB/R/tutorial.R",#
+                       ssl.verifypeer=FALSE) ))
+install.packages("zoo")
+script <- getURL("https://www.google.com/maps/dir/37.5527821,126.9444216/34.806762,127.24804/")
+script
+script <- getURL("https://maps.google.com/maps?saddr=37.5527821,126.9444216&amp;daddr=34.806762,127.24804&amp;output=classic&amp;dg=ntvb")
+script
+script <- getURL("https://maps.google.com/maps?saddr=37.5527821,126.9444216&daddr=34.806762,127.24804&output=classic&dg=ntvb")
+script
+script <- getURL("https://maps.google.com/maps?saddr=37.5527821,126.9444216&amp;daddr=34.806762,127.24804&amp;output=classic&amp;dg=ntvb")
+https://www.google.com/maps/preview/directions?authuser=0&hl=en&pb=!1m5!3m2!3d34.74810678853377!4d127.4128348638306!6e2!11b1!1m0!3m12!1m3!1d1529126.0989379794!2d126.04256062094203!3d36.155030194522!2m3!1f0!2f0!3f0!3m2!1i1280!2i712!4f13.1!6m5!2m1!20e3!4b0!9e3!16b1!15m3!1sl-vYU_G6ONLp8AW92oJ4!3b1!7e81&pf=p
+script <- getURL("https://www.google.com/maps/preview/directions?authuser=0&hl=en&pb=!1m5!3m2!3d34.74810678853377!4d127.4128348638306!6e2!11b1!1m0!3m12!1m3!1d1529126.0989379794!2d126.04256062094203!3d36.155030194522!2m3!1f0!2f0!3f0!3m2!1i1280!2i712!4f13.1!6m5!2m1!20e3!4b0!9e3!16b1!15m3!1sl-vYU_G6ONLp8AW92oJ4!3b1!7e81&pf=p")
+script
+script <- getURL("https://www.google.com/maps/dir/37.5527821,126.9444216/34.806762,127.24804/@36.1550302,126.0425606,8z/data=!4m4!4m3!1m0!1m0!5i2")
+script
+script <- getURL("https://maps.google.com/maps?saddr=37.5527821,126.9444216&daddr=34.806762,127.24804&)
+script <- getURL("https://maps.google.com/maps?saddr=37.5527821,126.9444216&daddr=34.806762,127.24804")
+scripot
+script
+readLines("https://maps.google.com/maps?f=d&source=s_d&saddr=37.658853000000001,126.775014&daddr=34.949660000000002,127.42050999999999")
+script <- getURL("https://maps.google.com/maps?f=d&source=s_d&saddr=37.658853000000001,126.775014&daddr=34.949660000000002,127.42050999999999")
+library(RCurl)
+script <- getURL("https://maps.google.com/maps?f=d&source=s_d&saddr=37.658853000000001,126.775014&daddr=34.949660000000002,127.42050999999999")
+script
+script <- getURL("https://maps.google.com/maps?f=d&source=s_d&saddr=37.658853000000001,126.775014&daddr=34.949660000000002,127.42050999999999&hl=ko")
+script
+library(rgdal)
+setwd("~/Dropbox/CensusSHP")
+(lyr = ogrListLayers("1101053.kml"))
+map = readOGR ("1101053.kml", layer=lyr, verbose = TRUE, drop_unsupported_fields=T, dropNULLGeometries=T)

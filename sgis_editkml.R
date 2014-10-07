@@ -1,5 +1,3 @@
-
-
 editsgisKML <- function(xx){
 	ind <- which(a == "<h1>통계정보</h1>")
 	sind <- which(a == "<Placemark>")
@@ -23,10 +21,10 @@ editsgisKML <- function(xx){
 
 #suppressWarnings(a <- readLines("~/Dropbox/CensusSHP/1123067.kml"))
 #editsgisKML(a)
-load("~/Dropbox/censuscode.RData")
+load("censuscode.RData")
 tmpcode <- subset(censuscode, substring(censuscode[,5], 1, 4) == "1123")
 
-dlist <- dir("~/Dropbox/CensusSHP", pattern="^1123[0-9]*.kml$", full.names=TRUE)
+dlist <- dir("CensusSHP", pattern="^1123[0-9]*.kml$", full.names=TRUE)
 pops <- c()
 library(fields)
 cols <- rev(tim.colors(10))
